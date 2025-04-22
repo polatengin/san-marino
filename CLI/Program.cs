@@ -1,2 +1,64 @@
-﻿// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Hello, World!");
+﻿using Spectre.Console;
+
+if (args.Length == 0)
+{
+  Console.WriteLine("Usage: gacu <path-to-repo>");
+  return;
+}
+
+var root = args[0];
+if (!Directory.Exists(root))
+{
+  Console.WriteLine($"Directory not found: {root}");
+  return;
+}
+
+var workflowFiles = Directory.GetFiles(root, "*.yml", SearchOption.AllDirectories)
+    .Concat(Directory.GetFiles(root, "*.yaml", SearchOption.AllDirectories))
+    .Where(f => f.Contains(".github/workflows"))
+    .ToList();
+
+if (!workflowFiles.Any())
+{
+  Console.WriteLine("No workflow files found.");
+  return;
+}
+
+var checker = new ActionVersionChecker();
+AnsiConsole.MarkupLine($"[green]Scanning {workflowFiles.Count} workflow files...[/]");
+
+foreach (var file in workflowFiles)
+{
+  AnsiConsole.MarkupLine($"[blue]{file}[/]");
+
+  var yaml = File.ReadAllText(file);
+  var refs = WorkflowParser.ExtractUsesFields(yaml);
+
+  var outdated = new List<(GitHubActionReference Ref, string Latest)>();
+
+  foreach (var r in refs)
+  {
+    var latest = await checker.GetLatestVersionAsync(r.Action);
+    if (latest != null && ActionVersionChecker.IsNewer(r.Version, latest))
+    {
+      outdated.Add((r, latest));
+    }
+  }
+
+  if (outdated.Any())
+  {
+    AnsiConsole.MarkupLine($"\n[blue]{file}[/]");
+    var table = new Table();
+    table.AddColumn("Action");
+    table.AddColumn("Current");
+    table.AddColumn("Latest");
+    table.AddColumn("Location");
+
+    foreach (var (r, latest) in outdated)
+    {
+      table.AddRow(r.Action, r.Version, latest, $"Line {r.Line}, Col {r.Column}");
+    }
+
+    AnsiConsole.Write(table);
+  }
+}
