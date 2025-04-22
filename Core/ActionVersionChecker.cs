@@ -6,7 +6,7 @@ public class ActionVersionChecker
   private readonly GitHubClient _client;
   private readonly Dictionary<string, string?> _cache = new();
 
-  public ActionVersionChecker(string userAgent = "YourProject-Core")
+  public ActionVersionChecker(string userAgent = "SanMarino-Core")
   {
     _client = new GitHubClient(new ProductHeaderValue(userAgent));
   }
