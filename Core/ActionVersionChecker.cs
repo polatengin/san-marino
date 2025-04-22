@@ -1,17 +1,19 @@
 using Octokit;
 using Semver;
 
+public record LatestVersion(string Version, string CommitSha);
+
 public class ActionVersionChecker
 {
   private readonly GitHubClient _client;
-  private readonly Dictionary<string, string?> _cache = new();
+  private readonly Dictionary<string, LatestVersion> _cache = new();
 
   public ActionVersionChecker(string userAgent = "SanMarino-Core")
   {
     _client = new GitHubClient(new ProductHeaderValue(userAgent));
   }
 
-  public async Task<string?> GetLatestVersionAsync(string action)
+  public async Task<LatestVersion?> GetLatestVersionAsync(string action)
   {
     if (_cache.TryGetValue(action, out var cached))
       return cached;
@@ -25,37 +27,31 @@ public class ActionVersionChecker
     try
     {
       var tags = await _client.Repository.GetAllTags(owner, repo);
-      var versions = tags
-          .Select(t => t.Name)
-          .Where(name => name.StartsWith("v"))
-          .Select(name => SemVersion.TryParse(name.TrimStart('v'), SemVersionStyles.Any, out var ver) ? ver : null)
-          .Where(v => v != null)
-          .Cast<SemVersion>()
-          .OrderByDescending(v => v)
-          .ToList();
-
-      var latest = versions.FirstOrDefault();
-      if (latest == null)
-        return null;
-
-      var latestStr = "v" + latest.ToString();
-      _cache[action] = latestStr;
-      return latestStr;
+      var latest = tags
+          .Where(e => e.Name != null && e.Commit != null && e.Commit.Sha != null && e.Name.StartsWith("v"))
+          .Select(e => new { Version = SemVersion.TryParse(e.Name.TrimStart('v'), SemVersionStyles.Strict, out var ver) ? ver : null, CommitSha = e.Commit.Sha })
+          .Where(e => e != null && e.Version != null && e.CommitSha != null)
+          .OrderByDescending(e => e.Version, new SemVersionNullableComparer())
+          .FirstOrDefault();
+      _cache[action] = new LatestVersion("v" + latest?.Version?.ToString() ?? string.Empty, latest?.CommitSha ?? string.Empty);
+      return _cache[action];
     }
-    catch
+    catch (Exception ex)
     {
+      Console.WriteLine($"Error fetching latest version for {action}: {ex.Message}");
       return null;
     }
   }
+}
 
-  public static bool IsNewer(string currentVersion, string latestVersion)
+public class SemVersionNullableComparer : IComparer<SemVersion?>
+{
+  public int Compare(SemVersion? x, SemVersion? y)
   {
-    if (SemVersion.TryParse(currentVersion.TrimStart('v'), SemVersionStyles.Any, out var current) &&
-        SemVersion.TryParse(latestVersion.TrimStart('v'), SemVersionStyles.Any, out var latest))
-    {
-      return latest.ComparePrecedenceTo(current) > 0;
-    }
+    if (x == null && y == null) return 0;
+    if (x == null) return -1;
+    if (y == null) return 1;
 
-    return false;
+    return x.ComparePrecedenceTo(y);
   }
 }
