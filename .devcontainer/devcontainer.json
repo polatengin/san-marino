@@ -11,9 +11,10 @@
         "editorconfig.editorconfig",
         "esbenp.prettier-vscode",
         "ms-dotnettools.csharp",
-        "ms-vscode.csharp",
         "ms-dotnettools.csharp-devkit",
-        "ms-dotnettools.vscode-dotnet-runtime"
+        "ms-dotnettools.vscode-dotnet-runtime",
+        "ms-vscode.csharp",
+        "ms-vscode.extension-test-runner"
       ]
     }
   }
