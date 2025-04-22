@@ -34,12 +34,12 @@ foreach (var file in workflowFiles)
   var yaml = File.ReadAllText(file);
   var refs = WorkflowParser.ExtractUsesFields(yaml);
 
-  var outdated = new List<(GitHubActionReference Ref, string Latest)>();
+  var outdated = new List<(GitHubActionReference Ref, LatestVersion Latest)>();
 
   foreach (var r in refs)
   {
     var latest = await checker.GetLatestVersionAsync(r.Action);
-    if (latest != null && ActionVersionChecker.IsNewer(r.Version, latest))
+    if (latest != null && r.Version != latest.Version && r.Version != latest.CommitSha)
     {
       outdated.Add((r, latest));
     }
@@ -52,11 +52,11 @@ foreach (var file in workflowFiles)
     table.AddColumn("Action");
     table.AddColumn("Current");
     table.AddColumn("Latest");
-    table.AddColumn("Location");
+    table.AddColumn("More Secure");
 
     foreach (var (r, latest) in outdated)
     {
-      table.AddRow(r.Action, r.Version, latest, $"Line {r.Line}, Col {r.Column}");
+      table.AddRow(r.Action, r.Version, latest.Version, latest.CommitSha);
     }
 
     AnsiConsole.Write(table);
