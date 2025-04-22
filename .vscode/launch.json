@@ -1,0 +1,49 @@
+{
+  "version": "2.0.0",
+  "configurations": [
+    {
+      "name": "VSCode Extension",
+      "type": "extensionHost",
+      "request": "launch",
+      "runtimeExecutable": "${execPath}",
+      "args": [
+        "--extensionDevelopmentPath=${workspaceRoot}/VSCodeExtension"
+      ],
+      "env": {},
+      "sourceMaps": true,
+      "outFiles": [
+        "${workspaceRoot}/VSCodeExtension/out/**/*.js"
+      ],
+      "preLaunchTask": "Build VSIX"
+    },
+    {
+      "name": "CLI",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "Build CLI",
+      "program": "${workspaceFolder}/CLI/bin/Debug/net9.0/CLI",
+      "args": [
+        "../"
+      ],
+      "env": {},
+      "cwd": "${workspaceFolder}/CLI",
+      "console": "internalConsole",
+      "stopAtEntry": false
+    },
+    {
+      "name": "CLI-Test",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "Build CLI",
+      "program": "${workspaceFolder}/CLI/bin/Debug/net8.0/bicep",
+      "args": [
+        "build-params",
+        "/workspaces/bicep/src/Bicep.Core.Samples/Files/baselines_bicepparam/Extends/parameters.bicepparam"
+      ],
+      "env": {},
+      "cwd": "${workspaceFolder}/src/Bicep.Cli",
+      "console": "internalConsole",
+      "stopAtEntry": false
+    },
+  ]
+}
