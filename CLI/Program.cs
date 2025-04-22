@@ -20,7 +20,7 @@ var workflowFiles = Directory.GetFiles(root, "*.yml", SearchOption.AllDirectorie
 
 if (!workflowFiles.Any())
 {
-  Console.WriteLine("No workflow files found.");
+  AnsiConsole.MarkupLine("[yellow]No workflow files found.[/]");
   return;
 }
 
