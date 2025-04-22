@@ -11,6 +11,10 @@ public class ActionVersionChecker
   public ActionVersionChecker(string userAgent = "SanMarino-Core")
   {
     _client = new GitHubClient(new ProductHeaderValue(userAgent));
+    if (Environment.GetEnvironmentVariable("GITHUB_TOKEN") is string token)
+    {
+      _client.Credentials = new Credentials(token, AuthenticationType.Bearer);
+    }
   }
 
   public async Task<LatestVersion?> GetLatestVersionAsync(string action)
