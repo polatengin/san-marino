@@ -12,7 +12,7 @@
       "env": {},
       "sourceMaps": true,
       "outFiles": [
-        "${workspaceRoot}/VSCodeExtension/out/**/*.js"
+        "${workspaceRoot}/VSCodeExtension/dist/**/*.js"
       ],
       "preLaunchTask": "Build VSIX"
     },
