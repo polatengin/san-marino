@@ -7,10 +7,13 @@
   "customizations": {
     "vscode": {
       "extensions": [
+        "dbaeumer.vscode-eslint",
+        "editorconfig.editorconfig",
+        "esbenp.prettier-vscode",
         "ms-dotnettools.csharp",
         "ms-vscode.csharp",
         "ms-dotnettools.csharp-devkit",
-        "dbaeumer.vscode-eslint"
+        "ms-dotnettools.vscode-dotnet-runtime"
       ]
     }
   }
