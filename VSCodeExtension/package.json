@@ -9,13 +9,22 @@
   "categories": [
     "Other"
   ],
-  "activationEvents": [],
+  "activationEvents": [
+    "workspaceContains:.github/workflows/*.yml"
+  ],
   "main": "./dist/extension.js",
   "contributes": {
-    "commands": [
+    "languages": [
       {
-        "command": "san-marino.helloWorld",
-        "title": "Hello World"
+        "id": "yaml",
+        "aliases": [
+          "YAML"
+        ],
+        "extensions": [
+          ".yml",
+          ".yaml"
+        ],
+        "configuration": "./language-configuration.json"
       }
     ]
   },
