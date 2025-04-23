@@ -28,3 +28,10 @@ To install the VS Code extension, you can search for "San Marino" in the VS Code
 code --install-extension san-marino
 ```
 
+## Usage
+
+To use the CLI, you can run the following command in your terminal:
+
+```bash
+smc <path-to-repo> [--update-version | --update-sha]
+```
