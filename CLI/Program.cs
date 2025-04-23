@@ -2,7 +2,7 @@
 
 if (args.Length == 0)
 {
-  Console.WriteLine("Usage: gacu <path-to-repo> [--update-version | --update-sha]");
+  Console.WriteLine("Usage: smc <path-to-repo> [--update-version | --update-sha]");
   return;
 }
 
