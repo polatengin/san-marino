@@ -1,0 +1,3 @@
+# CLI and VS Code Extension with Language Server Protocol (LSP)
+
+San Marino is a command-line interface (CLI) and Visual Studio Code (VS Code) extension that provides a language server protocol (LSP) for GitHub Action yaml files. It is designed to enhance the development experience by providing features such as; checking if the steps are at latest version, auto-updating the steps to the latest version, and provide updating steps with safer approaches. The CLI can be used independently, while the VS Code extension integrates the CLI into the VS Code editor for a seamless development experience.
