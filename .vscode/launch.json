@@ -14,7 +14,7 @@
       "outFiles": [
         "${workspaceRoot}/VSCodeExtension/dist/**/*.js"
       ],
-      "preLaunchTask": "Build VSIX"
+      "preLaunchTask": "watch"
     },
     {
       "name": "CLI",
