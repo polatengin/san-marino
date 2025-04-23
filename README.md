@@ -14,3 +14,17 @@ San Marino is a command-line interface (CLI) and Visual Studio Code (VS Code) ex
 
 - **Language Server Protocol (LSP)**: The CLI and VS Code extension use the language server protocol (LSP) to provide features such as code completion, linting, error checking, and schema validation for GitHub Action yaml files. This helps improve the development experience and ensures that your workflows are valid and error-free.
 
+## Installation
+
+To install the CLI, you can use the following command:
+
+```bash
+npm install -g san-marino-cli
+```
+
+To install the VS Code extension, you can search for "San Marino" in the VS Code marketplace or install it directly from the command line:
+
+```bash
+code --install-extension san-marino
+```
+
