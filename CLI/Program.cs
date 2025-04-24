@@ -28,7 +28,7 @@ if (!workflowFiles.Any())
 }
 
 var checker = new ActionVersionChecker();
-AnsiConsole.MarkupLine($"[green]Scanning {workflowFiles.Count} workflow files...[/]");
+AnsiConsole.MarkupLine($"[green]Scanning {workflowFiles.Count} workflow files in {root} folder[/]");
 
 foreach (var file in workflowFiles)
 {
