@@ -13,6 +13,7 @@ var rootCommand = new RootCommand("Check and update GitHub Action versions in wo
   updateShaOption
 };
 rootCommand.Name = "gacu";
+rootCommand.TreatUnmatchedTokensAsErrors = true;
 
 rootCommand.SetHandler(async (DirectoryInfo path, bool updateVersion, bool updateSha) =>
 {
