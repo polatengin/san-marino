@@ -32,8 +32,6 @@ AnsiConsole.MarkupLine($"[green]Scanning {workflowFiles.Count} workflow files in
 
 foreach (var file in workflowFiles)
 {
-  AnsiConsole.MarkupLine($"[blue]{file}[/]");
-
   var yaml = File.ReadAllText(file);
   var refs = WorkflowParser.ExtractUsesFields(yaml);
 
