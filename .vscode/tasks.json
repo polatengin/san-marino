@@ -27,13 +27,17 @@
     },
     {
       "label": "watch",
+      "command": "npm",
+      "args": [ "run", "build", "--loglevel", "silent" ],
+      "type": "shell",
+      "problemMatcher": "$tsc-watch",
+      "options": {
+        "cwd": "${workspaceFolder}/VSCodeExtension"
+      },
       "dependsOn": [
         "npm: watch:tsc",
         "npm: watch:esbuild"
       ],
-      "presentation": {
-        "reveal": "never"
-      },
       "group": {
         "kind": "build",
         "isDefault": true
@@ -68,25 +72,6 @@
         "group": "watch",
         "reveal": "never"
       }
-    },
-    {
-      "type": "npm",
-      "script": "watch-tests",
-      "problemMatcher": "$tsc-watch",
-      "isBackground": true,
-      "presentation": {
-        "reveal": "never",
-        "group": "watchers"
-      },
-      "group": "build"
-    },
-    {
-      "label": "tasks: watch-tests",
-      "dependsOn": [
-        "npm: watch",
-        "npm: watch-tests"
-      ],
-      "problemMatcher": []
     }
   ]
 }
