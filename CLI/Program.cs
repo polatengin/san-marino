@@ -12,6 +12,7 @@ var rootCommand = new RootCommand("Check and update GitHub Action versions in wo
   updateVersionOption,
   updateShaOption
 };
+rootCommand.Name = "gacu";
 
 rootCommand.SetHandler(async (DirectoryInfo path, bool updateVersion, bool updateSha) =>
 {
