@@ -52,11 +52,13 @@ rootCommand.SetHandler(async (DirectoryInfo path, bool updateVersion, bool updat
       AnsiConsole.MarkupLine($"\n[blue]{file}[/]");
       var table = new Table();
       table.AddColumn("Action");
-      table.AddColumn("Latest");
+      table.AddColumn("Status");
       table.AddColumn("Comments");
 
       foreach (var (r, latest) in outdated.DistinctBy(e => e.Ref.Action + e.Ref.Version))
       {
+        var _action = $"[link=https://github.com/{r.Action}]{r.Action}[/]";
+        var _status = string.Empty;
         var _comments = string.Empty;
         if (updateVersion)
         {
@@ -71,10 +73,9 @@ rootCommand.SetHandler(async (DirectoryInfo path, bool updateVersion, bool updat
           _comments = $"[green]{r.Version} -> {latest.CommitSha}[/]";
         }
 
-        var _changes = string.Empty;
         if (!r.Version.StartsWith("v"))
         {
-          _changes = $"[red]{r.Version}[/] -> [green]{latest.CommitSha}[/]";
+          _status = $"[red]{r.Version}[/] -> [green]{latest.CommitSha}[/]";
         }
         else
         {
@@ -88,10 +89,10 @@ rootCommand.SetHandler(async (DirectoryInfo path, bool updateVersion, bool updat
           var minorColor = isMajor ? majorColor : isMinor ? "yellow" : "white";
           var patchColor = isMajor ? majorColor : isMinor ? minorColor : isPatch ? "blue" : "white";
 
-          _changes = $"v[{majorColor}]{latest.Version.Major}.[/][{minorColor}]{latest.Version.Minor}.[/][{patchColor}]{latest.Version.Patch}[/] (Sha: {latest.CommitSha})";
+          _status = $"v[{majorColor}]{latest.Version.Major}.[/][{minorColor}]{latest.Version.Minor}.[/][{patchColor}]{latest.Version.Patch}[/] (Sha: {latest.CommitSha})";
         }
 
-        table.AddRow(new Markup($"[link=https://github.com/{r.Action}]{r.Action}[/]"), new Markup(_changes), new Markup(_comments));
+        table.AddRow(new Markup(_action), new Markup(_status), new Markup(_comments));
       }
 
       AnsiConsole.Write(table);
