@@ -1,4 +1,5 @@
-﻿using Spectre.Console;
+﻿using Semver;
+using Spectre.Console;
 
 if (args.Length == 0)
 {
@@ -40,7 +41,7 @@ foreach (var file in workflowFiles)
   foreach (var r in refs)
   {
     var latest = await checker.GetLatestVersionAsync(r.Action);
-    if (latest != null && r.Version != latest.Version && r.Version != latest.CommitSha)
+    if (latest != null && r.Version != latest.Version.ToString() && r.Version != latest.CommitSha)
     {
       outdated.Add((r, latest));
     }
