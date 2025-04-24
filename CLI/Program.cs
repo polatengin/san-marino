@@ -53,20 +53,22 @@ foreach (var file in workflowFiles)
     var table = new Table();
     table.AddColumn("Action");
     table.AddColumn("Latest");
+    table.AddColumn("Comments");
 
     foreach (var (r, latest) in outdated.DistinctBy(e => e.Ref.Action + e.Ref.Version))
     {
+      var _comments = string.Empty;
       if (updateVersionInPlace)
       {
         yaml = yaml.Replace($"{r.Action}@{r.Version}", $"{r.Action}@{latest.Version}");
         File.WriteAllText(file, yaml);
-        AnsiConsole.MarkupLine($"[green]{r.Action}@{r.Version} updated to {r.Action}@{latest.Version}[/]");
+        _comments = $"[green]{r.Version} -> {latest.Version}[/]";
       }
       else if (updateShaInPlace)
       {
         yaml = yaml.Replace($"{r.Action}@{r.Version}", $"{r.Action}@{latest.CommitSha}");
         File.WriteAllText(file, yaml);
-        AnsiConsole.MarkupLine($"[green]{r.Action}@{r.Version} updated to {r.Action}@{latest.CommitSha}[/]");
+        _comments = $"[green]{r.Version} -> {latest.CommitSha}[/]";
       }
 
       var _changes = string.Empty;
@@ -89,7 +91,7 @@ foreach (var file in workflowFiles)
         _changes = $"[{majorColor}]{latest.Version.Major}.[/][{minorColor}]{latest.Version.Minor}.[/][{patchColor}]{latest.Version.Patch}[/]";
       }
 
-      table.AddRow(new Markup($"[link=https://github.com/{r.Action}]{r.Action}[/]"), new Markup($"v{_changes} (Sha: {latest.CommitSha})"));
+      table.AddRow(new Markup($"[link=https://github.com/{r.Action}]{r.Action}[/]"), new Markup($"v{_changes} (Sha: {latest.CommitSha})"), new Markup(_comments));
     }
 
     AnsiConsole.Write(table);
