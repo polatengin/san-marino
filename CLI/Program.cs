@@ -18,11 +18,7 @@ rootCommand.TreatUnmatchedTokensAsErrors = true;
 rootCommand.SetHandler(async (DirectoryInfo path, bool updateVersion, bool updateSha) =>
 {
   AnsiConsole.MarkupLine($"[yellow]Scanning [green]{path.FullName}[/] for workflow files[/]");
-
-  var workflowFiles = Directory.GetFiles(path.FullName, "*.yml", SearchOption.AllDirectories)
-      .Concat(Directory.GetFiles(path.FullName, "*.yaml", SearchOption.AllDirectories))
-      .Where(f => f.Contains(".github/workflows") && !f.Contains("node_modules"))
-      .ToList();
+  var workflowFiles = DirectoryOperations.GetWorkflowFiles(path);
 
   if (!workflowFiles.Any())
   {
