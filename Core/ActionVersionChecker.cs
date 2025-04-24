@@ -1,7 +1,7 @@
 using Octokit;
 using Semver;
 
-public record LatestVersion(string Version, string CommitSha);
+public record LatestVersion(SemVersion Version, string CommitSha);
 
 public class ActionVersionChecker
 {
@@ -37,7 +37,7 @@ public class ActionVersionChecker
           .Where(e => e != null && e.Version != null && e.CommitSha != null)
           .OrderByDescending(e => e.Version, new SemVersionNullableComparer())
           .FirstOrDefault();
-      _cache[action] = new LatestVersion("v" + latest?.Version?.ToString() ?? string.Empty, latest?.CommitSha ?? string.Empty);
+      _cache[action] = new LatestVersion(latest.Version, latest?.CommitSha ?? string.Empty);
       return _cache[action];
     }
     catch (Exception ex)
