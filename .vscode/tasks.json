@@ -34,43 +34,9 @@
       "options": {
         "cwd": "${workspaceFolder}/VSCodeExtension"
       },
-      "dependsOn": [
-        "npm: watch:tsc",
-        "npm: watch:esbuild"
-      ],
       "group": {
         "kind": "build",
         "isDefault": true
-      }
-    },
-    {
-      "type": "npm",
-      "script": "watch:esbuild",
-      "group": "build",
-      "problemMatcher": "$eslint-stylish",
-      "isBackground": false,
-      "label": "npm: watch:esbuild",
-      "options": {
-        "cwd": "${workspaceFolder}/VSCodeExtension"
-      },
-      "presentation": {
-        "group": "watch",
-        "reveal": "never"
-      }
-    },
-    {
-      "type": "npm",
-      "script": "watch:tsc",
-      "group": "build",
-      "problemMatcher": "$tsc-watch",
-      "isBackground": true,
-      "label": "npm: watch:tsc",
-      "options": {
-        "cwd": "${workspaceFolder}/VSCodeExtension"
-      },
-      "presentation": {
-        "group": "watch",
-        "reveal": "never"
       }
     }
   ]
