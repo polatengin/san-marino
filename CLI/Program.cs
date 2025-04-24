@@ -2,25 +2,23 @@
 using Spectre.Console;
 using System.CommandLine;
 
-var rootCommand = new RootCommand("GitHub Action Version Checker");
+var pathOption =  new Option<DirectoryInfo>(["--path", "-p"], description: "Directory to scan for workflow files", getDefaultValue: () => new DirectoryInfo(Directory.GetCurrentDirectory()));
+var updateVersionOption = new Option<bool>(["--update-version", "-uv"], "Update the version in place");
+var updateShaOption = new Option<bool>(["--update-sha", "-us"], "Update the sha in place");
 
-rootCommand.SetHandler(async (bool updateVersion, bool updateSha) =>
+var rootCommand = new RootCommand("GitHub Action Version Checker")
 {
-  if (args.Length == 0)
-  {
-    Console.WriteLine("Usage: smc <path-to-repo> [--update-version | --update-sha]");
-    return;
-  }
+  pathOption,
+  updateVersionOption,
+  updateShaOption
+};
 
-  var root = args[0];
-  if (!Directory.Exists(root))
-  {
-    Console.WriteLine($"Directory not found: {root}");
-    return;
-  }
+rootCommand.SetHandler(async (DirectoryInfo path, bool updateVersion, bool updateSha) =>
+{
+  AnsiConsole.MarkupLine($"[yellow]Scanning [green]{path.FullName}[/] for workflow files[/]");
 
-  var workflowFiles = Directory.GetFiles(root, "*.yml", SearchOption.AllDirectories)
-      .Concat(Directory.GetFiles(root, "*.yaml", SearchOption.AllDirectories))
+  var workflowFiles = Directory.GetFiles(path.FullName, "*.yml", SearchOption.AllDirectories)
+      .Concat(Directory.GetFiles(path.FullName, "*.yaml", SearchOption.AllDirectories))
       .Where(f => f.Contains(".github/workflows") && !f.Contains("node_modules"))
       .ToList();
 
@@ -31,7 +29,7 @@ rootCommand.SetHandler(async (bool updateVersion, bool updateSha) =>
   }
 
   var checker = new ActionVersionChecker();
-  AnsiConsole.MarkupLine($"[green]Scanning {workflowFiles.Count} workflow files in {root} folder[/]");
+  AnsiConsole.MarkupLine($"[green]{workflowFiles.Count} workflow files found[/]");
 
   foreach (var file in workflowFiles)
   {
@@ -90,10 +88,10 @@ rootCommand.SetHandler(async (bool updateVersion, bool updateSha) =>
           var minorColor = isMajor ? majorColor : isMinor ? "yellow" : "white";
           var patchColor = isMajor ? majorColor : isMinor ? minorColor : isPatch ? "blue" : "white";
 
-          _changes = $"[{majorColor}]{latest.Version.Major}.[/][{minorColor}]{latest.Version.Minor}.[/][{patchColor}]{latest.Version.Patch}[/]";
+          _changes = $"v[{majorColor}]{latest.Version.Major}.[/][{minorColor}]{latest.Version.Minor}.[/][{patchColor}]{latest.Version.Patch}[/] (Sha: {latest.CommitSha})";
         }
 
-        table.AddRow(new Markup($"[link=https://github.com/{r.Action}]{r.Action}[/]"), new Markup($"v{_changes} (Sha: {latest.CommitSha})"), new Markup(_comments));
+        table.AddRow(new Markup($"[link=https://github.com/{r.Action}]{r.Action}[/]"), new Markup(_changes), new Markup(_comments));
       }
 
       AnsiConsole.Write(table);
@@ -103,8 +101,6 @@ rootCommand.SetHandler(async (bool updateVersion, bool updateSha) =>
       AnsiConsole.MarkupLine($"[blue]{file}[/] [green]No updates found.[/]");
     }
   }
-},
-  new Option<bool>(["--update-version", "-uv"], "Update the version in place"),
-  new Option<bool>(["--update-sha", "-us"], "Update the sha in place")
-);
+}, pathOption, updateVersionOption, updateShaOption);
+
 await rootCommand.InvokeAsync(args);
