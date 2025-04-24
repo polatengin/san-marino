@@ -94,4 +94,13 @@ foreach (var file in workflowFiles)
 
     AnsiConsole.Write(table);
   }
+  else
+  {
+    AnsiConsole.MarkupLine($"[green]{file}[/] [yellow]No updates found.[/]");
+
+    if (!updateVersionInPlace && !updateShaInPlace)
+    {
+      Environment.Exit(0);
+    }
+  }
 }
