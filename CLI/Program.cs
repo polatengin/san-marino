@@ -2,7 +2,7 @@
 using Spectre.Console;
 using System.CommandLine;
 
-var pathOption =  new Option<DirectoryInfo>(["--path", "-p"], description: "Directory to scan for workflow files", getDefaultValue: () => new DirectoryInfo(Directory.GetCurrentDirectory()));
+var pathOption = new Option<DirectoryInfo>(["--path", "-p"], description: "Directory to scan for workflow files", getDefaultValue: () => new DirectoryInfo(Directory.GetCurrentDirectory()));
 var updateVersionOption = new Option<bool>(["--update-version", "-uv"], "Update the version in place");
 var updateShaOption = new Option<bool>(["--update-sha", "-us"], "Update the sha in place");
 
