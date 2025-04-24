@@ -18,7 +18,7 @@ bool updateShaInPlace = args.Contains("--update-sha");
 
 var workflowFiles = Directory.GetFiles(root, "*.yml", SearchOption.AllDirectories)
     .Concat(Directory.GetFiles(root, "*.yaml", SearchOption.AllDirectories))
-    .Where(f => f.Contains(".github/workflows"))
+    .Where(f => f.Contains(".github/workflows") && !f.Contains("node_modules"))
     .ToList();
 
 if (!workflowFiles.Any())
