@@ -6,7 +6,7 @@ var pathOption = new Option<DirectoryInfo>(["--path", "-p"], description: "Direc
 var updateVersionOption = new Option<bool>(["--update-version", "-uv"], "Update the version in place");
 var updateShaOption = new Option<bool>(["--update-sha", "-us"], "Update the sha in place");
 
-var rootCommand = new RootCommand("GitHub Action Version Checker")
+var rootCommand = new RootCommand("Check and update GitHub Action versions in workflow files")
 {
   pathOption,
   updateVersionOption,
