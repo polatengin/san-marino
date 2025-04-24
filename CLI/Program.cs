@@ -56,7 +56,7 @@ foreach (var file in workflowFiles)
     table.AddColumn("Latest");
     table.AddColumn("More Secure");
 
-    foreach (var (r, latest) in outdated)
+    foreach (var (r, latest) in outdated.DistinctBy(e => e.Ref.Action + e.Ref.Version))
     {
       if (updateVersionInPlace)
       {
