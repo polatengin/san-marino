@@ -52,9 +52,7 @@ foreach (var file in workflowFiles)
     AnsiConsole.MarkupLine($"\n[blue]{file}[/]");
     var table = new Table();
     table.AddColumn("Action");
-    table.AddColumn("Current");
     table.AddColumn("Latest");
-    table.AddColumn("More Secure");
 
     foreach (var (r, latest) in outdated.DistinctBy(e => e.Ref.Action + e.Ref.Version))
     {
@@ -71,7 +69,27 @@ foreach (var file in workflowFiles)
         AnsiConsole.MarkupLine($"[green]{r.Action}@{r.Version} updated to {r.Action}@{latest.CommitSha}[/]");
       }
 
-      table.AddRow(r.Action, r.Version, latest.Version, latest.CommitSha);
+      var _changes = string.Empty;
+      if (!r.Version.StartsWith("v"))
+      {
+        _changes = $"[red]{r.Version}[/] -> [green]{latest.CommitSha}[/]";
+      }
+      else
+      {
+        var _currentVersion = SemVersion.Parse(r.Version.TrimStart('v'), SemVersionStyles.Any);
+
+        var isMajor = _currentVersion.Major != latest.Version.Major;
+        var isMinor = _currentVersion.Minor != latest.Version.Minor;
+        var isPatch = _currentVersion.Patch != latest.Version.Patch;
+
+        var majorColor = isMajor ? "red" : "white";
+        var minorColor = isMajor ? majorColor : isMinor ? "yellow" : "white";
+        var patchColor = isMajor ? majorColor : isMinor ? minorColor : isPatch ? "blue" : "white";
+
+        _changes = $"[{majorColor}]{latest.Version.Major}.[/][{minorColor}]{latest.Version.Minor}.[/][{patchColor}]{latest.Version.Patch}[/]";
+      }
+
+      table.AddRow(new Markup($"[link=https://github.com/{r.Action}]{r.Action}[/]"), new Markup($"v{_changes} (Sha: {latest.CommitSha})"));
     }
 
     AnsiConsole.Write(table);
