@@ -5,11 +5,10 @@
     "lib": [
       "ES2022"
     ],
-    "outDir": "dist",
+    "outDir": "out",
     "sourceMap": true,
-    "rootDir": ".",
     "strict": true,
-    "types": ["vscode"]
+    "esModuleInterop": true
   },
   "exclude": ["node_modules", ".vscode-test"]
 }
