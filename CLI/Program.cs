@@ -20,6 +20,13 @@ rootCommand.SetHandler(async (DirectoryInfo path, bool updateVersion, bool updat
   AnsiConsole.MarkupLine($"[yellow]Scanning [green]{path.FullName}[/] for workflow files[/]");
   var (success, workflowFiles) = DirectoryOperations.GetWorkflowFiles(path);
 
+  if (!success)
+  {
+    AnsiConsole.MarkupLine($"[red]Invalid path [italic]{path}[/][/]");
+    Environment.Exit(1);
+    return;
+  }
+
   if (!workflowFiles.Any())
   {
     AnsiConsole.MarkupLine("[yellow]No workflow files found.[/]");
