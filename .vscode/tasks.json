@@ -51,7 +51,10 @@
       "group": {
         "kind": "build",
         "isDefault": true
-      }
+      },
+      "dependsOn": [
+        "Build LanguageServer"
+      ]
     }
   ]
 }
