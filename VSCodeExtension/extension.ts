@@ -13,10 +13,10 @@ export function activate(context: vscode.ExtensionContext) {
 
   const clientOptions: LanguageClientOptions = {
     documentSelector: [{ scheme: 'file', language: 'yaml' }],
-    outputChannelName: 'YourProject LSP',
+    outputChannelName: 'San Marino',
   };
 
-  client = new LanguageClient('yourProjectLsp', 'YourProject Language Server', serverOptions, clientOptions);
+  client = new LanguageClient('san-marino-lsp', 'San Marino Language Server', serverOptions, clientOptions);
   client.start();
 }
 
