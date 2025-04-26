@@ -26,6 +26,20 @@
       "problemMatcher": "$msCompile"
     },
     {
+      "label": "Build LanguageServer",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "build",
+        "${workspaceFolder}/LanguageServer/LanguageServer.csproj",
+        "/property:GenerateFullPaths=true",
+        "/consoleloggerparameters:NoSummary",
+        "--output",
+        "${workspaceFolder}/VSCodeExtension/dist/LanguageServer"
+      ],
+      "problemMatcher": "$msCompile"
+    },
+    {
       "label": "watch",
       "command": "npm",
       "args": [ "run", "build", "--loglevel", "silent" ],
