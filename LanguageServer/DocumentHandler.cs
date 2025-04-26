@@ -9,18 +9,12 @@ using OmniSharp.Extensions.LanguageServer.Protocol.Window;
 
 public class DocumentHandler : ITextDocumentSyncHandler
 {
-  private readonly ILanguageServer _router;
-
   private readonly Container<TextDocumentFilter> _documentSelector = new Container<TextDocumentFilter>(
       new TextDocumentFilter
       {
         Pattern = "**/*.csproj"
       }
   );
-  public DocumentHandler(ILanguageServer router)
-  {
-    _router = router;
-  }
 
   public TextDocumentSyncKind Change { get; } = TextDocumentSyncKind.Full;
 
