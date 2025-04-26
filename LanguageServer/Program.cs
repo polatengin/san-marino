@@ -6,7 +6,10 @@ var server = await LanguageServer.From(options =>
                 .WithInput(Console.OpenStandardInput())
                 .WithOutput(Console.OpenStandardOutput())
                 .WithLoggerFactory(new LoggerFactory())
-                .AddDefaultLoggingProvider()
+                .WithServices(services =>
+                {
+                  services.AddScoped<DocumentHandler>();
+                })
                 .WithHandler<DocumentHandler>()
              );
 
