@@ -18,7 +18,7 @@ rootCommand.TreatUnmatchedTokensAsErrors = true;
 rootCommand.SetHandler(async (DirectoryInfo path, bool updateVersion, bool updateSha) =>
 {
   AnsiConsole.MarkupLine($"[yellow]Scanning [green]{path.FullName}[/] for workflow files[/]");
-  var workflowFiles = DirectoryOperations.GetWorkflowFiles(path);
+  var (success, workflowFiles) = DirectoryOperations.GetWorkflowFiles(path);
 
   if (!workflowFiles.Any())
   {
