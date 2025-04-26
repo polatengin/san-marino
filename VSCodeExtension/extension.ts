@@ -4,7 +4,7 @@ import * as vscode from 'vscode';
 let client: LanguageClient;
 
 export function activate(context: vscode.ExtensionContext) {
-  const serverExe = process.platform === 'win32' ? 'YourProject.Lsp.exe' : './YourProject.Lsp';
+  const serverExe = context.asAbsolutePath('./dist/LanguageServer/LanguageServer');
 
   const serverOptions: ServerOptions = {
     run: { command: serverExe },
