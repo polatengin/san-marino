@@ -18,6 +18,9 @@
       {
         "id": "yaml",
         "aliases": [
+          "yml",
+          "yaml",
+          "YML",
           "YAML"
         ],
         "extensions": [
